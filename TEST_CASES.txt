@@ -1,0 +1,80 @@
+PackageGraph — manual test cases
+=================================
+All data below is real (live npm registry + live osv.dev), verified against
+this app's actual database as of the time this file was generated.
+
+
+1. PACKAGES ALREADY IN THE CATALOG (search finds these instantly)
+-------------------------------------------------------------------
+Search box: Dashboard > Packages
+
+  Package      Version   Expected "Depends on" count
+  -----------  --------  ----------------------------
+  express      5.3.0     51
+  next         16.4.3    (large tree — several hundred, Next.js itself)
+  react-dom    19.3.1    small (scheduler + a couple others)
+  qs           6.17.1    small (side-channel family)
+  debug        4.4.3     1 (ms)
+
+Click "Show impact" on each to see the reverse (implosion) direction —
+e.g. selecting debug and clicking "Show impact" should list these 6
+packages: body-parser, express, finalhandler, router, send, serve-static.
+
+
+2. PACKAGES NOT YET IN THE CATALOG (tests "Fetch from npm")
+-------------------------------------------------------------------
+Type the name, hit Search, confirm it's empty, click "Fetch from npm".
+
+  Package        Expected version fetched   Notes
+  -------------  -------------------------  --------------------------------
+  zod            4.6.7                      no dependencies — good minimal case
+  chalk          6.0.1                      small, popular
+  uuid           14.0.3                     no dependencies
+  minimist       1.2.8                      tiny, no dependencies
+  @babel/core    8.0.10                     tests the @scope/name input format
+  webpack        5.112.2                    large tree — good explode stress test
+
+(Versions above are "latest" as of when this file was generated — npm
+moves fast, so treat the exact number as approximate; what matters is
+that the fetch succeeds and a real version number appears.)
+
+Invalid-format test: type "Express!!" or "UPPER_CASE" and hit Search —
+expect no crash, and if you try "Fetch from npm" on something invalid,
+a 400 error with the format-guidance message.
+
+
+3. FLAGGING REAL VULNERABILITIES (Security Admin only)
+-------------------------------------------------------------------
+Dashboard > Packages > select the package > Flag vulnerability panel.
+These are real, currently-published advisories from osv.dev.
+
+  Package           OSV ID                   Severity   Expected affected_package_count
+  ----------------  -----------------------  ---------  --------------------------------
+  debug             GHSA-gxpj-cx7g-858c       LOW        6
+  qs                GHSA-hrpp-h998-j3pp       (varies)   2
+  ms                GHSA-w9mr-4mfr-499f       (varies)   7
+  path-to-regexp    GHSA-9wv6-86v2-598j       (varies)   2
+
+Expected "affected" package lists (what implode_impact returns):
+
+  qs              -> body-parser, express
+  ms              -> debug, send, body-parser, express, finalhandler, router, serve-static
+  path-to-regexp  -> router, express
+
+affected_app_count depends on what Applications you've created and which
+packages you've linked to them (Dashboard > Applications) — it's the count
+of your applications that use any of the affected packages above. Link an
+application to "express" first, then flag qs/ms/debug, and watch
+affected_app_count go from 0 to 1 automatically (no page reload needed —
+re-flag or revisit Vulnerabilities page to see the updated count).
+
+
+4. SANITY CHECKS
+-------------------------------------------------------------------
+- Flagging the same OSV id twice on the same package should update the
+  existing flag (status resets to "open"), not create a duplicate row.
+- Resolving a flag (Vulnerabilities page > Resolve) should flip its
+  status badge from red "open" to green "resolved".
+- Logging in as "dev" (password dev123) should hide the Vulnerabilities
+  nav link and the Flag vulnerability panel entirely — only "admin"
+  (password admin123) can see/use them.

@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  --color-canvas: #ffffff;
+  --color-canvas-subtle: #f6f8fa;
+  --color-canvas-inset: #f6f8fa;
+  --color-border: #d0d7de;
+  --color-border-muted: #d8dee4;
+  --color-fg: #1f2328;
+  --color-fg-muted: #656d76;
+  --color-fg-subtle: #6e7781;
+  --color-accent: #0969da;
+  --color-accent-emphasis: #0969da;
+  --color-success: #1a7f37;
+  --color-success-subtle: #dafbe1;
+  --color-danger: #cf222e;
+  --color-danger-subtle: #ffebe9;
+  --color-attention: #9a6700;
+  --color-attention-subtle: #fff8c5;
+  --color-sidebar: #f6f8fa;
+  --color-btn-bg: #f6f8fa;
+  --color-btn-border: #d0d7de;
+  --color-btn-hover-bg: #f3f4f6;
+  --color-btn-primary-bg: #1f883d;
+  --color-btn-primary-hover-bg: #1a7f37;
+  --color-btn-primary-fg: #ffffff;
+}
+
+[data-theme="dark"] {
+  --color-canvas: #0d1117;
+  --color-canvas-subtle: #161b22;
+  --color-canvas-inset: #010409;
+  --color-border: #30363d;
+  --color-border-muted: #21262d;
+  --color-fg: #e6edf3;
+  --color-fg-muted: #848d97;
+  --color-fg-subtle: #6e7681;
+  --color-accent: #58a6ff;
+  --color-accent-emphasis: #1f6feb;
+  --color-success: #3fb950;
+  --color-success-subtle: #122117;
+  --color-danger: #f85149;
+  --color-danger-subtle: #2d1211;
+  --color-attention: #d29922;
+  --color-attention-subtle: #2b2111;
+  --color-sidebar: #010409;
+  --color-btn-bg: #21262d;
+  --color-btn-border: #30363d;
+  --color-btn-hover-bg: #30363d;
+  --color-btn-primary-bg: #238636;
+  --color-btn-primary-hover-bg: #2ea043;
+  --color-btn-primary-fg: #ffffff;
+}
+
+@theme inline {
+  --color-canvas: var(--color-canvas);
+  --color-canvas-subtle: var(--color-canvas-subtle);
+  --color-border: var(--color-border);
+  --color-fg: var(--color-fg);
+  --color-fg-muted: var(--color-fg-muted);
+  --color-accent: var(--color-accent);
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Consolas, "Liberation Mono", monospace;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: white;
+}
